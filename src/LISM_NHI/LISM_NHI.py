@@ -80,7 +80,7 @@ def read_in_NHI_map(which_map):
 
     #stars = np.loadtxt(file_path+'NHI_column_fitted_stars_' + which_map + '_upperlowerlimits.txt')
 
-    NHI_map = np.loadtxt(f"{PACKAGEDIR}/data/"+'NHI_column_map_' + which_map + '_upperlowerlimits.txt')
+    NHI_map = np.loadtxt(f"{PACKAGEDIR}/data/NHI_column_map_"+ which_map + '_upperlowerlimits.txt')
 
     grid_skycoord_catalog = generate_coordinate_grids()
 
