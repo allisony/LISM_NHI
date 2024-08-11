@@ -43,23 +43,23 @@ def input_star_info(skycoord_obj, distance):
 
     elif (distance > 10) & (distance <= 20):
 
-        which_map = "10_20 pc"
+        which_map = "10_20pc"
 
     elif (distance > 20) & (distance <= 30):
 
-        which_map = "20_30 pc"
+        which_map = "20_30pc"
 
     elif (distance > 30) & (distance <= 50):
 
-        which_map = "30_50 pc"
+        which_map = "30_50pc"
 
     elif (distance > 50) & (distance <= 70):
 
-        which_map = "50_70 pc"
+        which_map = "50_70pc"
 
     elif (distance > 70) & (distance <= 100):
 
-        which_map = "70_100 pc"
+        which_map = "70_100pc"
 
     print("Selected map: ", which_map)
 
