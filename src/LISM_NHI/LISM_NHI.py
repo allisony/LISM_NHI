@@ -3,24 +3,16 @@ from astropy.coordinates import SkyCoord
 import astropy.units as u
 import numpy as np
 from . import PACKAGEDIR
-from LISM_NHI import config_parser
 
 
 
 class LISM_NHI_map:
 
-    def __init__(self, config_filename=f"{PACKAGEDIR}/data/configuration_file.txt"):
-        
-        self.config_filename = config_filename
-        self.config = self.__read_config(config_filename)
 
-    def __read_config(self, config_filename):
-        return config_parser.Config(config_filename)
+    def generate_coordinate_grids(self, phi_len=200, theta_len=200):
 
-    def generate_coordinate_grids(self):
-
-        phi = np.linspace(0, 2.*np.pi, self.config.phi_len)
-        theta = np.linspace(-0.5 * np.pi, 0.5 * np.pi, self.config.theta_len)
+        phi = np.linspace(0, 2.*np.pi, phi_len)
+        theta = np.linspace(-0.5 * np.pi, 0.5 * np.pi, theta_len)
         phi_grid, theta_grid = np.meshgrid(phi, theta, indexing="ij")
         phi_grid = phi_grid.flatten()
         theta_grid = theta_grid.flatten()

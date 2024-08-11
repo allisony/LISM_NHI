@@ -1,8 +1,0 @@
-# Configuration file for LISM_NHI.py
-
-[Grid information]
-phi length = 200
-theta length = 200
-
-[File names]
-
