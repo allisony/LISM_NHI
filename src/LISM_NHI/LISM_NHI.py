@@ -14,9 +14,9 @@ def main(skycoord_obj, distance):
 
     NHI = get_nearest_NHI_map_value(NHI_map, nearest_grid_index)
 
+    print("log10 N(HI) = ", NHI)
+
     return NHI
-
-
 
 
 def generate_coordinate_grids(phi_len=200, theta_len=200):
@@ -61,11 +61,15 @@ def input_star_info(skycoord_obj, distance):
 
         which_map = "70_100 pc"
 
+    print("Selected map: ", which_map)
+
     return skycoord_obj, which_map
 
 def find_nearest_grid_element(grid_skycoord_catalog, skycoord_obj):
 
     nearest_grid_index, sep2d, dist3d = skycoord_obj.match_to_catalog_3d(grid_skycoord_catalog, 1)
+
+    print("SkyCoord object [", skycoord_obj, "] is ", sep2d, " from nearest grid element")
 
     return nearest_grid_index
 
