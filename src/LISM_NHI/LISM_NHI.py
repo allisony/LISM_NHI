@@ -6,7 +6,7 @@ from . import PACKAGEDIR
 
 def main(skycoord_obj, distance):
 
-    skycoord_obj, which_map = input_star_info(skycoord_obj, distance)
+    which_map, uncertainty = input_star_info(skycoord_obj, distance)
 
     grid_skycoord_catalog, NHI_map = read_in_NHI_map(which_map)
 
@@ -14,12 +14,16 @@ def main(skycoord_obj, distance):
 
     NHI = get_nearest_NHI_map_value(NHI_map, nearest_grid_index)
 
-    print("log10 N(HI) = ", NHI)
+    print("Estimated log10 N(HI) = ", NHI)
+    print("Estimated uncertainty = ", uncertainty)
+    print(" ")
+
+    find_nearest_stars(skycoord_obj)
 
     return NHI
 
 
-def generate_coordinate_grids(phi_len=200, theta_len=200):
+def generate_coordinate_grids(phi_len=600, theta_len=600):
 
     phi = np.linspace(0, 2.*np.pi, phi_len)
     theta = np.linspace(-0.5 * np.pi, 0.5 * np.pi, theta_len)
@@ -28,7 +32,7 @@ def generate_coordinate_grids(phi_len=200, theta_len=200):
     theta_grid = theta_grid.flatten()
     X_grid = np.vstack((phi_grid,theta_grid))
 
-    grid_skycoord_catalog = SkyCoord(X_grid[0,:]*u.radian,X_grid[1,:]*u.radian,frame='icrs')
+    grid_skycoord_catalog = SkyCoord(X_grid[0,:]*u.radian,X_grid[1,:]*u.radian,frame='galactic')
 
     return grid_skycoord_catalog
 
@@ -40,30 +44,36 @@ def input_star_info(skycoord_obj, distance):
     if distance <= 10:
 
         which_map = "all_inside_10pc"
+        sigma = 0.22
 
     elif (distance > 10) & (distance <= 20):
 
         which_map = "10_20pc"
+        sigma = 0.35
 
     elif (distance > 20) & (distance <= 30):
 
         which_map = "20_30pc"
+        sigma = 0.36
 
     elif (distance > 30) & (distance <= 50):
 
         which_map = "30_50pc"
+        sigma = 0.36
 
     elif (distance > 50) & (distance <= 70):
 
         which_map = "50_70pc"
+        sigma = 0.41
 
     elif (distance > 70) & (distance <= 100):
 
         which_map = "70_100pc"
+        sigma = 0.57
 
     print("Selected map: ", which_map)
 
-    return skycoord_obj, which_map
+    return which_map, sigma
 
 def find_nearest_grid_element(grid_skycoord_catalog, skycoord_obj):
 
@@ -92,6 +102,24 @@ def get_nearest_NHI_map_value(NHI_map, nearest_grid_index):
     return NHI_map[nearest_grid_index]
 
 
+def find_nearest_stars(user_target_skycoord_obj):
+
+    df = pd.read_csv(f"{PACKAGEDIR}/data/NHI_data.csv")
+
+    coords = SkyCoord(ra=df['RA'].values * u.degree, dec=df['DEC'].values * u.degree)
+
+    separations = user_target_skycoord_obj.separation(coords)
+
+    df['separation (deg)'] = separations.degree
+
+    lowest_sep_df = df.sort_values(by='separation (deg)').head(10)
+    
+    result = lowest_sep_df[['Latex Name', 'RA', 'DEC', 'distance (pc)','N(HI)','N(HI) uncertainty','N(HI) uncertainty adjusted', 'separation (deg)']]
+
+    print("Top 10 nearest sight lines for comparison")
+    print(result)
+
+    return
 
         
 
