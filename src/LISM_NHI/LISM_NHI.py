@@ -2,6 +2,8 @@ import pandas as pd
 from astropy.coordinates import SkyCoord
 import astropy.units as u
 import numpy as np
+import requests
+import os
 from . import PACKAGEDIR
 
 def main(skycoord_obj, distance):
@@ -90,11 +92,33 @@ def read_in_NHI_map(which_map):
 
     #stars = np.loadtxt(file_path+'NHI_column_fitted_stars_' + which_map + '_upperlowerlimits.txt')
 
+    if not os.path.exists(f"{PACKAGEDIR}/data/NHI_column_map_"+ which_map + '_upperlowerlimits.txt'):
+
+        download_maps()
+
     NHI_map = np.loadtxt(f"{PACKAGEDIR}/data/NHI_column_map_"+ which_map + '_upperlowerlimits.txt')
 
     grid_skycoord_catalog = generate_coordinate_grids()
 
     return grid_skycoord_catalog, NHI_map[:,1] # return median values
+
+
+def download_maps():
+
+
+    releases = requests.get( f"https://api.github.com/repos/allisony/LISM_NHI/releases").json()
+    most_recent_release = releases[0]
+
+    for asset in most_recent_release.get("assets", []):
+
+        asset_headers = {"Accept": "application/octet-stream"}
+        asset_response = requests.get(asset.get("browser_download_url"), headers=asset_headers)
+
+        with open(f"{PACKAGEDIR}/data/" + asset.get("name"), "wb") as f:
+            f.write(asset_response.content)
+
+    return
+
 
 
 def get_nearest_NHI_map_value(NHI_map, nearest_grid_index):
