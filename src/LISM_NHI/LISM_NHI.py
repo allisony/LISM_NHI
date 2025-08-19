@@ -46,17 +46,17 @@ def input_star_info(skycoord_obj, distance):
     if distance <= 10:
 
         which_map = "all_inside_10pc"
-        sigma = 0.22
+        sigma = 0.20
 
     elif (distance > 10) & (distance <= 20):
 
         which_map = "10_20pc"
-        sigma = 0.35
+        sigma = 0.36
 
     elif (distance > 20) & (distance <= 30):
 
         which_map = "20_30pc"
-        sigma = 0.36
+        sigma = 0.35
 
     elif (distance > 30) & (distance <= 50):
 
@@ -66,12 +66,12 @@ def input_star_info(skycoord_obj, distance):
     elif (distance > 50) & (distance <= 70):
 
         which_map = "50_70pc"
-        sigma = 0.41
+        sigma = 0.42
 
     elif (distance > 70) & (distance <= 100):
 
         which_map = "70_100pc"
-        sigma = 0.57
+        sigma = 0.48
 
     print("Selected map: ", which_map)
 
